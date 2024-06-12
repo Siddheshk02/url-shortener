@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  url-shortener:
+    image: siddheshk02/url-shortener:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    networks:
+      - app-network
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
