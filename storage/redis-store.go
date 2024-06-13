@@ -21,8 +21,17 @@ type RedisStore struct {
 // NewRedisStore initializes a new Redis client and returns a RedisStore
 func NewRedisStore() *RedisStore {
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
+		Addr: "localhost:6379",
 		DB:   0,
+	})
+
+	return &RedisStore{Client: rdb}
+}
+
+func NewTestRedisStore() *RedisStore {
+	rdb := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+		DB:   1,
 	})
 
 	return &RedisStore{Client: rdb}
@@ -113,4 +122,8 @@ func (s *RedisStore) getDomain(originalURL string) (string, error) {
 	}
 
 	return strings.TrimPrefix(parsedURL.Host, "www."), nil
+}
+
+func (s *RedisStore) FlushTestDB() {
+	s.Client.FlushDB(ctx)
 }
